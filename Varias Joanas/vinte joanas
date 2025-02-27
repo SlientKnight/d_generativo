@@ -1,0 +1,153 @@
+Joana [] joanas;
+
+color cor_fundo = color(255/*110, 19, 171*/);//limpa o fundo;
+color azulescuro = color(17, 38, 92);
+color azulclaro = color(38, 71, 153);
+color rosaclaro = color(222, 35, 138);
+color rosaescuro = color(98, 9, 112);
+
+//float hitbox=140; //raio do corpo da joaninha
+boolean corre=true;
+
+class Joana {
+  float jx;
+  float jy;
+  float paleta;
+  float ang;
+  float escala;
+  float incX, incY;
+  int w=140/2;
+  int h=140/2;
+  color cor1; //cor escura
+  color cor2; //cor clara
+
+  Joana(float jx, float jy, float ang, float escala, float incX, float incY, color cor1, color cor2) {
+    this.jx = jx;
+    this.jy = jy;
+    this.ang = ang;
+    this.escala = escala;
+    this.incX = incX;
+    this.incY = incY;
+    this.cor1 = cor1;
+    this.cor2 = cor2;
+  }
+
+  void desenha() {
+    pushMatrix();
+    translate (jx, jy);
+
+    scale(escala);
+
+    //drop shadow
+    fill(0, 0, 0, 100);
+    noStroke();
+    circle(-5, 5, 150);
+
+    rotate(radians(ang));
+
+    //corpo da joaninha
+    stroke (cor1);//azul escuro
+    strokeWeight(15);
+    fill(cor2); //azul claro
+    circle(0, 0, 140);
+
+    //olhos da joana
+    noStroke();
+    fill (cor1); //AZUL ESCURO
+    arc (0, 0-73, 173, 112, PI/4, 3*PI/4, PIE);
+    fill(cor2); //azul claro
+    circle(0-25, 0-50, 35);
+    circle(0+25, 0-50, 35);
+    fill (cor1); //AZUL ESCURO
+
+    //por cima do olho beirada
+    stroke (cor1);//azul escuro
+    strokeWeight(15);
+    noFill();
+    circle(0, 0, 140);
+
+    //outras bolinhas da joaninha
+    noStroke();
+    fill (cor1); //AZUL ESCURO
+    circle(30, 55, 23);
+    circle(30, 55, 23);
+    circle(54, 25, 23);
+    circle(54, 25, 23);
+    circle(60, 10, 23);
+    circle(60, 10, 23);
+
+    //coração
+    circle(0-15, 0+18, 35);
+    circle(0+15, 0+18, 35);
+    arc(0, 0-15, 80, 80, 0.65, 2.46, PIE);
+
+    //linha da flecha
+    stroke(cor1);
+    strokeWeight(5);
+    line(0, 10, 0, 70);
+
+    popMatrix();
+  }
+  
+  void move(){
+    if (jx>0 && jx<width-w){
+      jx += incX;
+    } else {
+      incX *= -1;
+    }
+    if (jy>0 && jy<height-h){
+      jy += incY;
+    } else {
+      incY *= -1;
+    }
+    
+    //if (corre){
+    //cor1 = azulescuro;
+    //cor2 = azulclaro;
+    //jx+=incX;
+    //jy+=incY;
+    
+    ////verifico se a posicao do retangulo ultrapassou os limites da tela
+    ////e, caso verdadeiro, inverto o valor de incremento
+    //if(jx+w > width || jx-w < 0){  
+    //  incX *= -1; 
+    //  //acelera = int(random(3,10));
+    //}
+    //if (jy+h > height || jy-h < 0){  
+    //  incY *= -1; 
+    //  //acelera = int(random(3,10)); 
+    //} else { 
+    //jx = mouseX; 
+    //jy=mouseY;
+    //cor1=rosaescuro;  
+    //cor2=rosaclaro;}
+  }
+}
+
+void setup() {
+  size (800, 800);
+  
+  joanas = new Joana[20];
+  
+  for(int i = 0; i < joanas.length; i++){
+    float nw_ang = random(50, 100);
+    float nw_d = 140;
+    float nw_x = random(nw_d/2, width-nw_d/2);
+    float nw_y = random(nw_d/2, height-nw_d/2);
+    float nw_incX = random(-1.5, 2.5);
+    float nw_incY = random(-1.5, 2.5);
+    float nw_escala = random (0.75, 1.5);
+    color nw_cor1 = color(random(255), random(255), random(255));
+    color nw_cor2 = color(random(255), random(255), random(255));
+    joanas[i] = new Joana(nw_x, nw_y, nw_ang, nw_escala, nw_incX, nw_incY, nw_cor1, nw_cor2);
+  }
+
+}
+
+void draw() {
+  background(cor_fundo);
+  for(int i=0 ; i<joanas.length; i++){
+    joanas[i].desenha();
+    joanas[i].move();
+  }
+}
