@@ -73,7 +73,8 @@ void draw() {
           break;
         }
       }
-      fill(0);
+      color c = color(mouseX,mouseY,100);
+      fill(c);
       noStroke();
       text(t, x, y+intervalo);
     }
