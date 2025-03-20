@@ -1,15 +1,15 @@
 import processing.video.*;
 Capture video;
-int modo = 1;
-int intervalo = 11;
+int modo = 3;
+int intervalo = 5;
 PFont SourceCode;
 
 void setup() {
-  size(1280, 720); //800x450 ou 640x360
+  size(1280, 720);
   video = new Capture(this, 1280, 720);
   video.start();
   background(255);
-  SourceCode = createFont("Arial", intervalo);
+  SourceCode = createFont("Times New Roman", intervalo);
   textFont(SourceCode);
 }
 
@@ -21,10 +21,10 @@ void draw() {
   video.loadPixels();
   background(0);
   char t = ' ';
-  for (int y = 0; y < height; y+=intervalo) {
+  for (int y = 0; y < height; y+=intervalo) { //VERIFICA OS PIXELS E O BRILHO DELES PRA DEFINIR O UNICODE
     for (int x = 0; x < width; x+=intervalo) {
       int i = y * width + x;
-      float brilho =  brightness(video.pixels[i]); //se for usar apenas um pedaco do video, use pixels[i]
+      float brilho =  brightness(video.pixels[i]);
       int sombra = int(map(brilho, 0, 255, 4, 0));
 
       if (modo == 1) {
@@ -34,50 +34,27 @@ void draw() {
         if (sombra == 3) t = '▙';
         if (sombra == 4) t = '█';
       } else if (modo == 2) {
-        switch(sombra) {
-        case 0:
-          t = '▏';
-          break;
-        case 1:
-          t = '▍';
-          break;
-        case 2:
-          t = '▋';
-          break;
-        case  3:
-          t = '▊';
-          break;
-        default:
-          t = '█';
-          break;
-        }
+        if (sombra == 0) t = '▏';
+        if (sombra == 1) t = '▃';
+        if (sombra == 2) t = '3';
+        if (sombra == 3) t = '▛';
+        if (sombra == 4) t = '▉';
       } else if (modo == 3) {
-        switch(sombra) {
-        case 0:
-          t = ' ';
-          break;
-        case 1:
-          t = '▒';
-          break;
-        case 2:
-          t = '░';
-          break;
-        case  3:
-          t = '▓';
-          break;
-        default:
-          t = '█';
-          break;
+        if (sombra == 0) t = ' ';
+        if (sombra == 1) t = '▒';
+        if (sombra == 2) t = '░';
+        if (sombra == 3) t = '▓';
+        if (sombra == 4) t = '█';
         }
-      }
-      fill(0,200,10);
+      
+      fill(0,200,10); // verde
       noStroke();
       text(t, x, y+intervalo);
     }
   }
 }
 
-void keyPressed(){
+void keyPressed(){ // ALTERNA ENTRE OS MODOS DE CAMERA PELAS SETAS DO TECLADO
 if (key == CODED) {
     if (keyCode == UP && modo < 3) {
      modo++;
@@ -91,12 +68,7 @@ if (key == CODED) {
   }
 }
 
-void mousePressed(){
- //c = get(mouseX,mouseY);
-}
-
 /*
-
  UNICODE BLOCKS
  U+2580  ▀  Upper half block
  U+2581  ▁  Lower one eighth block
