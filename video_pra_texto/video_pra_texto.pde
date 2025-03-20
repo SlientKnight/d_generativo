@@ -1,23 +1,28 @@
 import processing.video.*;
-Movie video=;
-color c = 255;
+Capture video;
 int modo = 1;
-int intervalo = 5;
+int intervalo = 10;
+color c = 100;
 PFont SourceCode;
 
 void setup() {
-  background(255);
-  size(1280, 720);
-  video = new Capture(this,1280,720);
+  background(0);
+  size(800,450);
+  video = new Capture(this,800,450);
   video.start();
   
-  SourceCode = createFont("Source Code Pro", intervalo);
+  SourceCode = createFont("Arial", intervalo);
   textFont(SourceCode);
-  loadPixels();
+  //loadPixels();
+}
+
+void captureEvent(Capture video) {
+  video.read();
 }
 
 void draw() {
-  background(255);
+  video.loadPixels();
+  background(0);
   char t = ' '; //DEFINE O ESPAÇO VAZIO
   for (int y = 0; y < height; y+=intervalo) { //LÊ CADA UM DOS PIXELS DA IMAGEM
     for (int x = 0; x < width; x+=intervalo) {
@@ -25,13 +30,7 @@ void draw() {
       float brilho =  brightness(pixels[i]);
       int sombra = int(map(brilho, 0, 255, 4, 0));
 
-      /*
-       * dois modos diferentes de fazer a escolha de caracteres
-       * uma usando uma sequencia de 'if'
-       * outra usando a combinacao 'switch / case'
-       */
-
-      if (modo == 1) {
+        if (modo == 1) {
         if (sombra == 0) t = ' ';
         if (sombra == 1) t = '▘';
         if (sombra == 2) t = '▚';
