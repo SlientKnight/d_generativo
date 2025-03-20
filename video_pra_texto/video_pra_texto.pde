@@ -1,19 +1,16 @@
 import processing.video.*;
 Capture video;
 int modo = 1;
-int intervalo = 10;
-color c = 100;
+int intervalo = 11;
 PFont SourceCode;
 
 void setup() {
-  background(0);
-  size(800,450);
-  video = new Capture(this,800,450);
+  size(1280, 720); //800x450 ou 640x360
+  video = new Capture(this, 1280, 720);
   video.start();
-  
+  background(255);
   SourceCode = createFont("Arial", intervalo);
   textFont(SourceCode);
-  //loadPixels();
 }
 
 void captureEvent(Capture video) {
@@ -23,14 +20,14 @@ void captureEvent(Capture video) {
 void draw() {
   video.loadPixels();
   background(0);
-  char t = ' '; //DEFINE O ESPAÇO VAZIO
-  for (int y = 0; y < height; y+=intervalo) { //LÊ CADA UM DOS PIXELS DA IMAGEM
+  char t = ' ';
+  for (int y = 0; y < height; y+=intervalo) {
     for (int x = 0; x < width; x+=intervalo) {
       int i = y * width + x;
-      float brilho =  brightness(pixels[i]);
+      float brilho =  brightness(video.pixels[i]); //se for usar apenas um pedaco do video, use pixels[i]
       int sombra = int(map(brilho, 0, 255, 4, 0));
 
-        if (modo == 1) {
+      if (modo == 1) {
         if (sombra == 0) t = ' ';
         if (sombra == 1) t = '▘';
         if (sombra == 2) t = '▚';
@@ -73,13 +70,12 @@ void draw() {
           break;
         }
       }
-      fill(0);
+      fill(0,200,10);
       noStroke();
       text(t, x, y+intervalo);
     }
   }
 }
-
 
 void keyPressed(){
 if (key == CODED) {
@@ -93,6 +89,10 @@ if (key == CODED) {
       intervalo++;
     }
   }
+}
+
+void mousePressed(){
+ //c = get(mouseX,mouseY);
 }
 
 /*
